@@ -3,13 +3,13 @@ version: '3.7'
 #volumes:
 #    prometheus_data: {}
 
-#networks:
+networks:
 #  front-tier:
-#  back-tier:
+  back-tier:
 
 services:
   prometheus:
-    image: prom/prometheus:v2.1.0
+    image: prom/prometheus:v2.15.2
     volumes:
       - ./config/:/etc/prometheus/
  #     - prometheus_data:/prometheus
@@ -21,15 +21,18 @@ services:
     ports:
       - 9090:9090
 
-#    networks:
-#      - back-tier
+    networks:
+      - back-tier
     restart: always
 
   node-exporter:
     image: prom/node-exporter
+# It is not necessary because node-exporter already exports the 9100 port and we don't need to use that port from outside docker
     ports: 
       - 9100:9100
     restart: always
+    networks:
+      - back-tier
 #  node-exporter:
 #    image: prom/node-exporter
 #    volumes:
